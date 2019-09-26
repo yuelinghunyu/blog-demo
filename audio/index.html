@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>音频录制和展示</title>
+  <style type="text/css">
+    header{
+      width: 800px;
+      margin: 0 auto;
+      line-height: 40px;
+      text-align: center;
+      font-weight: bold;
+    }
+    #section-audio_content{
+      width: 800px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin: 0 auto;
+    }
+    #section-audio_left, #section-audio_right{
+      display: flex;
+      flex-direction: column;
+      padding: 40px;
+    }
+    #section-audio_right > * {
+      margin: 10px 0px;
+    }
+    button, a {
+      margin: 10px auto;
+    }
+    a{
+      display: block;
+      width: 100px;
+      text-align: center;
+    }
+    #canvas {
+			width: 600px;
+			height: 200px;
+		}
+  </style>
+</head>
+<body>
+  <header>音频录制和展示</header>
+  <section
+    id="section-audio_content"
+  >
+    <section
+      id="section-audio_left"
+    >
+      <button id="record">录制</button>
+      <button id="stop">停止</button>
+      <button id="play">播放</button>
+      <a href="javascript:void(0)" id="downPcm"  download="">下载pcm</a>
+      <a href="javascript:void(0)" id="downWav"  download="">下载wav</a>
+    </section>
+    <section
+      id="section-audio_right"
+    >
+      <aside>播放录音：</aside>
+      <audio id="audio" controls autoplay></audio>
+      <aside>音频展示：</aside>
+      <canvas id='canvas'></canvas>
+    </section>
+  </section>
+  <script src="js/record.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
