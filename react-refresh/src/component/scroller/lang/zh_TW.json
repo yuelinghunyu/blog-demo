@@ -1,0 +1,13 @@
+{
+    "pullDownToRefresh": "下拉刷新",
+    "releaseToRefresh": "松開刷新",
+    "refreshSuccess": "刷新成功",
+    "refreshFailed": "刷新失敗",
+    "pullupToLoadMore": "上拉加載更多",
+    "releaseToLoadMore": "松開加載更多",
+    "loadMoreSuccess": "加載成功",
+    "loadMoreFailed": "加載失敗",
+    "noMoreData": "沒有更多數據了",
+    "pushNoticy": "有新的變更，請下拉刷新",
+    "loading": "加載中..."
+}

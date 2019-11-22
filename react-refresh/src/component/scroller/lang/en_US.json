@@ -1,0 +1,14 @@
+{
+    "pullDownToRefresh": "Pull down to refresh",
+    "releaseToRefresh": "Release",
+    "refreshSuccess": "Successful refresh",
+    "refreshFailed": "Failed to refresh",
+    "pullupToLoadMore": "Pull up to load more",
+    "releaseToLoadMore": "Release",
+    "loadMoreSuccess": "Successful loading",
+    "loadMoreFailed": "Failed to load",
+    "noMoreData": "No more content",
+    "pushNoticy": "New updates, pull down to refresh",
+    "loading": "Loading…"
+}
+
