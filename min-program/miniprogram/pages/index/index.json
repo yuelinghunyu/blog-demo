@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "custom-line": "../../components/line/line"
+  },
+  "disableScroll": true
+}

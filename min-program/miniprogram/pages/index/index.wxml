@@ -1,0 +1,20 @@
+<!-- index.wxml -->
+<view class="container">
+  <view class="title">排序连线</view>
+  <view id="content" class="content" bind:touchmove="lineMove" bind:touchend="lineEnd">
+    <custom-line wx:if="{{positionList.length}}" wx:for="{{positionList}}" wx:key="index" class="custom-line" startX="{{item.startX}}" startY="{{item.startY}}" endX="{{item.endX}}" endY="{{item.endY}}" style="left:{{item.startX + 'px'}}; top:{{item.startY + 'px'}}; width:{{ item.width+ 'px'}}; transform: {{'rotate('+ item.rotate +'deg)'}};" bind:calcPostionLine="onCalcPostionLine"></custom-line>
+    <view class="left">
+      <view class="left-item" wx:for="{{leftList}}" wx:key="id" wx:for-id="id">
+        <view class="left-item-text">{{index + 1}} : {{item.text}}</view>
+        <view class="left-item-icon" data-id="{{item.id}}" bind:touchstart="lineStart"></view>
+      </view>
+    </view>
+    <view class="right">
+      <view class="right-item" wx:for="{{rightList}}" wx:key="id" wx:for-id="id">
+        <view class="right-item-text">{{index + 1}} : {{item.text}}</view>
+        <view class="right-item-icon"></view>
+      </view>
+    </view>
+  </view>
+  <button type="primary" bindtap="sortList">排序</button>
+</view>

@@ -1,0 +1,80 @@
+.title {
+  color: #625963;
+  line-height: 100rpx;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 80rpx;
+  position: relative;
+  box-sizing: border-box;
+  border: 1rpx solid #b57fba;
+}
+
+.custom-line {
+  height: 5rpx;
+  position: absolute;
+  transform-origin: 0 0;
+}
+
+.left,
+.right {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+.left-item,
+.right-item {
+  display: flex;
+  font-size: 30rpx;
+  line-height: 100rpx;
+  position: relative;
+}
+
+.left-item-icon,
+.right-item-icon {
+  position: absolute;
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50%;
+  background-color: #625963;
+  top: 35rpx;
+}
+
+.left-item-icon {
+  right: -30rpx;
+}
+
+.right-item-icon {
+  left: -30rpx;
+}
+
+.left-item,
+.left-item-text {
+  justify-content: flex-end;
+}
+
+.left-item {
+  padding-right: 5%;
+}
+
+.right-item,
+.right-item-text {
+  justify-content: flex-start;
+}
+
+.right-item {
+  padding-left: 5%;
+}
+
+button {
+  margin-top: 80rpx;
+  width: 200rpx;
+  height: 80rpx;
+  font-size: 36rpx;
+  line-height: 80rpx;
+}
