@@ -16,5 +16,9 @@
       </view>
     </view>
   </view>
-  <button type="primary" bindtap="sortList">排序</button>
+  <view class="btn-container">
+    <button type="primary" bindtap="sortList">排序</button>
+    <button type="warn">保存</button>
+  </view>
+  <text class="text-container">点击左边黑点拖动至右边黑点区域进行连线</text>
 </view>
