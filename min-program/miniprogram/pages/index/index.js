@@ -3,79 +3,37 @@ const app = getApp()
 
 Page({
   data: {
-    leftList: [
-      {
-        id: '3b85d9fc-c96e-4e49-855d-24d9d5473de1',
-        text: "床前明月光",
-        x: 0,
-        y: 0
-      },
-      {
-        id: "8979f945-e53d-49b1-89d3-d28f1709c481",
-        text: "终南阴岭秀",
-        x: 0,
-        y: 0
-      },
-      {
-        id: "f633fb45-7ae3-47d2-a7c8-3df931d999eb",
-        text: "千山鸟飞绝",
-        x: 0,
-        y: 0
-      },
-      {
-        id: "d530bcc2-3f95-4f09-8957-8d03337bc6a7",
-        text: "君看一叶舟",
-        x: 0,
-        y: 0
-      },
-      {
-        id: "687d9c14-9594-4238-b0d4-eb013992b62d",
-        text: "空山不见人",
-        x: 0,
-        y: 0
-      },
-    ],
-    rightList: [
-      {
-        id: '3b85d9fc-c96e-4e49-855d-24d9d5473de1',
-        text: "疑是地上霜",
-        x: 0,
-        y: 0
-      },
-      {
-        id: "8979f945-e53d-49b1-89d3-d28f1709c481",
-        text: "积雪浮云端",
-        x: 0,
-        y: 0
-      },
-      {
-        id: "f633fb45-7ae3-47d2-a7c8-3df931d999eb",
-        text: "万径人踪灭",
-        x: 0,
-        y: 0
-      },
-      {
-        id: "d530bcc2-3f95-4f09-8957-8d03337bc6a7",
-        text: "出没风波里",
-        x: 0,
-        y: 0
-      },
-      {
-        id: "687d9c14-9594-4238-b0d4-eb013992b62d",
-        text: "但闻人语响",
-        x: 0,
-        y: 0
-      },
-    ],
+    leftList: [],
+    rightList: [],
     positionList: [],
     parentTop: 0,
     parentLeft: 0,
     startFlag: false,
     currentId: ""
   },
-  onReady: function () {
-    const query = wx.createSelectorQuery()
+  onLoad: function () {
+    wx.showLoading({
+      title: '加载中',
+    })
+    // 页面创建时执行
+    const db = wx.cloud.database({
+      env: 'difficult-ojjvv'
+    })
+    db.collection('line').get().then(res => {
+      wx.hideLoading()
+      const listArray = res.data[0]
+      const leftList = listArray.left_list
+      const rightList = listArray.right_list
+      this.setData({
+        leftList: leftList,
+        rightList: rightList
+      })
+      this.initPosition()
+    })
+  },
+  initPosition: function () {
     const that = this
+    const query = wx.createSelectorQuery()
     query.select("#content").boundingClientRect(function (res) {
       that.setData({
         parentTop: res.top,
@@ -105,12 +63,17 @@ Page({
     query.exec()
   },
   sortList: function () {
+    wx.showLoading({
+      title: '排序中',
+    })
     this.data.leftList.sort(this.randomSort)
     this.data.rightList.sort(this.randomSort)
     this.setData({
       leftList: this.data.leftList,
       rightList: this.data.rightList
     })
+    wx.hideLoading()
+    this.initPosition()
   },
   randomSort: function () {
     return Math.random() > 0.5 ? -1 : 1

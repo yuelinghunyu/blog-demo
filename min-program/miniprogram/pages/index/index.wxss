@@ -90,4 +90,5 @@ button {
 .text-container {
   font-size: 30rpx;
   color: #b57fba;
+  font-weight: bold;
 }
