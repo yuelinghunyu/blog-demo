@@ -20,5 +20,5 @@
     <button type="primary" bindtap="sortList">排序</button>
     <button type="warn">保存</button>
   </view>
-  <text class="text-container">点击左边黑点拖动至右边黑点区域进行连线</text>
+  <text class="text-container">点击左边 "黑点" 拖动至右边 "黑点区域" 进行连线</text>
 </view>

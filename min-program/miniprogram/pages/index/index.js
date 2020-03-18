@@ -5,11 +5,16 @@ Page({
   data: {
     leftList: [],
     rightList: [],
+    leftBorder: {},
+    rightBorder: {},
+    stardHeight: 0,
     positionList: [],
     parentTop: 0,
     parentLeft: 0,
     startFlag: false,
-    currentId: ""
+    currentId: "",
+    currentX: 0,
+    currentY: 0
   },
   onLoad: function () {
     wx.showLoading({
@@ -29,6 +34,7 @@ Page({
         rightList: rightList
       })
       this.initPosition()
+      this.initBorders()
     })
   },
   initPosition: function () {
@@ -45,8 +51,8 @@ Page({
         const itemX = "leftList[" + index + "].x"
         const itemY = "leftList[" + index + "].y"
         that.setData({
-          [itemX]: node.left - that.data.parentLeft,
-          [itemY]: node.top - that.data.parentTop
+          [itemX]: node.left - that.data.parentLeft + node.width / 2,
+          [itemY]: node.top - that.data.parentTop + node.height / 2
         })
       })
     })
@@ -55,9 +61,42 @@ Page({
         const itemX = "rightList[" + index + "].x"
         const itemY = "rightList[" + index + "].y"
         that.setData({
-          [itemX]: node.left,
-          [itemY]: node.top - that.data.parentTop
+          [itemX]: node.left + node.width / 2,
+          [itemY]: node.top - that.data.parentTop + node.height / 2
         })
+      })
+    })
+    query.exec()
+  },
+  initBorders: function () {
+    const that = this
+    const query = wx.createSelectorQuery()
+    query.select(".left").boundingClientRect(function (res) {
+      console.log(res)
+      that.setData({
+        leftBorder: {
+          startX: res.left,
+          startY: 0,
+          endX: res.right,
+          endY: res.height
+        }
+      })
+    })
+    query.select(".right").boundingClientRect(function (res) {
+      console.log(res)
+      that.setData({
+        rightBorder: {
+          startX: res.left,
+          startY: 0,
+          endX: res.right,
+          endY: res.height
+        }
+      })
+    })
+    query.select(".left-item").boundingClientRect(function (res) {
+      console.log(res)
+      that.setData({
+        stardHeight: res.height
       })
     })
     query.exec()
@@ -74,6 +113,7 @@ Page({
     })
     wx.hideLoading()
     this.initPosition()
+    this.initBorders()
   },
   randomSort: function () {
     return Math.random() > 0.5 ? -1 : 1
@@ -85,7 +125,6 @@ Page({
       return leftItem.id === id
     })
     if (updateItemIndex !== -1) {
-      console.log(updateItemIndex)
       const upWidth = "positionList[" + updateItemIndex + "].width"
       const upRotate = "positionList[" + updateItemIndex + "].rotate"
       this.setData({
@@ -106,7 +145,11 @@ Page({
     const currentItem = this.data.leftList.find(function (leftItem) {
       return leftItem.id === id
     })
+    const existPositionIndex = this.data.positionList.findIndex(function (postion) {
+      return postion.id === id
+    })
     let originList = this.data.positionList
+    if (existPositionIndex !== -1) originList.splice(existPositionIndex, 1)
     const newPosition = {
       id: id,
       startX: currentItem.x,
@@ -131,12 +174,15 @@ Page({
         return leftItem.id === id
       })
       if (updateItemIndex !== -1) {
-        console.log(updateItemIndex)
         const updateEndX = "positionList[" + updateItemIndex + "].endX"
         const updateEndY = "positionList[" + updateItemIndex + "].endY"
         this.setData({
           [updateEndX]: moveX,
           [updateEndY]: moveY,
+        })
+        this.setData({
+          currentX: moveX,
+          currentY: moveY
         })
       } else {
         console.log("流程不对")
@@ -147,7 +193,47 @@ Page({
     this.setData({
       startFlag: false
     })
+    const currentIndex = this.testBorder(this.data.currentX, this.data.currentY, 'right')
+    if (currentIndex !== -1) {
+      const currentItem = this.data.rightList[currentIndex] // 坐标
+      const id = this.data.currentId
+      const updateItemIndex = this.data.positionList.findIndex(function (leftItem) {
+        return leftItem.id === id
+      })
+      if (updateItemIndex !== -1) {
+        const updateEndX = "positionList[" + updateItemIndex + "].endX"
+        const updateEndY = "positionList[" + updateItemIndex + "].endY"
+        this.setData({
+          [updateEndX]: currentItem.x,
+          [updateEndY]: currentItem.y,
+        })
+        this.setData({
+          currentX: 0,
+          currentY: 0
+        })
+      } else {
+        console.log("流程不对")
+      }
+    }
     console.log(this.data.positionList)
     console.log("连线结束")
+  },
+  testBorder: function (x, y, direction) {
+    if (direction === "left") { // 左边区域
+      if (x >= this.data.leftBorder.startX && x <= this.data.leftBorder.endX && y >= this.data.leftBorder.startY && y <= this.data.leftBorder.endY) { // 边界中
+        const index = Math.floor(y / this.data.stardHeight)
+        return index
+      } else {
+        return -1
+      }
+    }
+    if (direction === "right") { // 右边区域
+      if (x >= this.data.rightBorder.startX && x <= this.data.rightBorder.endX && y >= this.data.rightBorder.startY && y <= this.data.rightBorder.endY) { // 边界中
+        const index = Math.floor(y / this.data.stardHeight)
+        return index
+      } else {
+        return -1
+      }
+    }
   }
 })

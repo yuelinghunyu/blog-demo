@@ -51,35 +51,17 @@ Component({
       // console.log("endY:" + endY)
       let angle = 0
       let line = 0
-      let a = 0
-      if (startX == endX) {
-        if (startY > endY) {
-          let tempY = startY;
-          startY = endY;
-          endY = tempY;
-        }
-        angle = 180
-      }
-      if (Math.abs(startX - endX) > Math.abs(startY - endY)) {
-        if (startX > endX) {
-          let tempX = endX;
-          endX = startX;
-          startX = tempX;
-        }
-      } else {
-        if (startY > endY) {
-          let tempY = startY;
-          startY = endY;
-          endY = tempY;
-        }
-      }
-      a = (startY - endY) / (startX - endX);
-      angle = this.getTanDeg(a)
+      angle = this.getTanDeg(startX, endX, startY, endY)
+      console.log("angle:" + angle)
       line = Math.round(Math.sqrt(Math.pow((endX - startX), 2) + Math.pow((endY - startY), 2)))
       return { angle, line }
     },
-    getTanDeg: function (tan) {
-      let result = Math.atan(tan) / (Math.PI / 180)
+    getTanDeg: function (startX, endX, startY, endY) {
+      let disY = endY - startY
+      let disX = endX - startX
+      console.log("disY:" + disY)
+      console.log("disX:" + disX)
+      let result = Math.atan2(disY, disX) * (180 / Math.PI)
       return Math.round(result)
     },
     initStartPostion: function () {
