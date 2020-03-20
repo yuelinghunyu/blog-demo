@@ -14,7 +14,8 @@ Page({
     startFlag: false,
     currentId: "",
     currentX: 0,
-    currentY: 0
+    currentY: 0,
+    rightLeft: 0
   },
   onLoad: function () {
     wx.showLoading({
@@ -66,6 +67,11 @@ Page({
         })
       })
     })
+    query.select(".right-item-icon").boundingClientRect(function (res) {
+      that.setData({
+        rightLeft: res.left
+      })
+    })
     query.exec()
   },
   initBorders: function () {
@@ -86,7 +92,7 @@ Page({
       console.log(res)
       that.setData({
         rightBorder: {
-          startX: res.left,
+          startX: that.data.rightLeft,
           startY: 0,
           endX: res.right,
           endY: res.height
@@ -114,6 +120,7 @@ Page({
     wx.hideLoading()
     this.initPosition()
     this.initBorders()
+    this.resetData()
   },
   randomSort: function () {
     return Math.random() > 0.5 ? -1 : 1
@@ -194,12 +201,13 @@ Page({
       startFlag: false
     })
     const currentIndex = this.testBorder(this.data.currentX, this.data.currentY, 'right')
+    const id = this.data.currentId
+    const currentPositionList = this.data.positionList
+    const updateItemIndex = currentPositionList.findIndex(function (leftItem) {
+      return leftItem.id === id
+    })
     if (currentIndex !== -1) {
       const currentItem = this.data.rightList[currentIndex] // 坐标
-      const id = this.data.currentId
-      const updateItemIndex = this.data.positionList.findIndex(function (leftItem) {
-        return leftItem.id === id
-      })
       if (updateItemIndex !== -1) {
         const updateEndX = "positionList[" + updateItemIndex + "].endX"
         const updateEndY = "positionList[" + updateItemIndex + "].endY"
@@ -214,6 +222,11 @@ Page({
       } else {
         console.log("流程不对")
       }
+    } else {
+      currentPositionList.splice(updateItemIndex, 1)
+      this.setData({
+        positionList: currentPositionList
+      })
     }
     console.log(this.data.positionList)
     console.log("连线结束")
@@ -235,5 +248,10 @@ Page({
         return -1
       }
     }
+  },
+  resetData: function () {
+    this.setData({
+      positionList: []
+    })
   }
 })

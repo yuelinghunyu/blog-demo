@@ -4,9 +4,9 @@
   <view id="content" class="content" bind:touchmove="lineMove" bind:touchend="lineEnd">
     <custom-line wx:if="{{positionList.length}}" wx:for="{{positionList}}" wx:key="index" class="custom-line" startX="{{item.startX}}" startY="{{item.startY}}" endX="{{item.endX}}" endY="{{item.endY}}" style="left:{{item.startX + 'px'}}; top:{{item.startY + 'px'}}; width:{{ item.width+ 'px'}}; transform: {{'rotate('+ item.rotate +'deg)'}};" bind:calcPostionLine="onCalcPostionLine"></custom-line>
     <view class="left">
-      <view class="left-item" wx:for="{{leftList}}" wx:key="id" wx:for-id="id">
+      <view class="left-item" wx:for="{{leftList}}" wx:key="id" wx:for-id="id" data-id="{{item.id}}" bind:touchstart="lineStart">
         <view class="left-item-text">{{index + 1}} : {{item.text}}</view>
-        <view class="left-item-icon" data-id="{{item.id}}" bind:touchstart="lineStart"></view>
+        <view class="left-item-icon"></view>
       </view>
     </view>
     <view class="right">
@@ -18,7 +18,6 @@
   </view>
   <view class="btn-container">
     <button type="primary" bindtap="sortList">排序</button>
-    <button type="warn">保存</button>
   </view>
   <text class="text-container">点击左边 "黑点" 拖动至右边 "黑点区域" 进行连线</text>
 </view>
