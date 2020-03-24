@@ -9,4 +9,4 @@
 掘金地址：[vue中利用iscroll.js解决pc端滚动问题](https://juejin.im/post/5e4506dc51882549417fbdd5)
 ## 四、小程序实践 —— 精简版前端连线题   
 纯js实现画线条  
-掘金地址：[## 三、小程序实践 —— 精简版前端连线题](https://juejin.im/post/5e741dd151882549087dc386)
+掘金地址：[小程序实践 —— 精简版前端连线题](https://juejin.im/post/5e741dd151882549087dc386)
