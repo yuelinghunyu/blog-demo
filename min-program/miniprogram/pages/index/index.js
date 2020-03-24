@@ -17,6 +17,7 @@ Page({
     currentY: 0,
     rightLeft: 0
   },
+  // 页面生命周期初始化
   onLoad: function () {
     wx.showLoading({
       title: '加载中',
@@ -38,6 +39,7 @@ Page({
       this.initBorders()
     })
   },
+  // 获取题面黑点的中心点坐标
   initPosition: function () {
     const that = this
     const query = wx.createSelectorQuery()
@@ -74,6 +76,7 @@ Page({
     })
     query.exec()
   },
+  // 获取坐标允许的经过的边界
   initBorders: function () {
     const that = this
     const query = wx.createSelectorQuery()
@@ -196,7 +199,7 @@ Page({
       }
     }
   },
-  lineEnd: function (e) {
+  lineEnd: function () {
     this.setData({
       startFlag: false
     })
