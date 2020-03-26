@@ -10,7 +10,7 @@ const common_config = {
   }
 }
 const dev_config = {
-  database: "mso_db",
+  database: "view_pic",
   username: "root",
   password: "root",
   host: "localhost",
@@ -20,7 +20,7 @@ const pro_config = {}
 
 let config = env === 'production' ? Object.assign({}, common_config, pro_config) : Object.assign({}, common_config, dev_config)
 
-
+console.log(config)
 const sequelize = new Sequelize(
   config.database, // database
   config.username, // username

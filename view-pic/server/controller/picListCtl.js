@@ -3,8 +3,8 @@ const PicList = require("../model/picList")
 class PicListCtl {
   async getAllPicList (ctx) {
     const { page, limit } = ctx.params
-    const data = await PicList.findAll({
-      limit: limit,
+    const data = await PicList.findAndCountAll({
+      limit: Number(limit),
       offset: Number((page - 1) * limit),
       attributes: ['id', 'file_path']
     })

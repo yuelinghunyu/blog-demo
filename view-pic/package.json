@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "server": "nodemon server/index.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -18,11 +19,14 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.1.2",
-    "vue-router": "^3.1.6",
-    "vue-template-compiler": "^2.6.11",
     "koa": "^2.11.0",
+    "koa-router": "^8.0.8",
+    "mso-flex": "^1.0.2",
+    "mysql2": "^2.1.0",
     "nodemon": "^2.0.2",
-    "sequelize": "^5.21.5"
+    "sequelize": "^5.21.5",
+    "vue-router": "^3.1.6",
+    "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
     "root": true,
