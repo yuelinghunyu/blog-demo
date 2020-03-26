@@ -34,6 +34,32 @@ menu {
   padding: 0;
 }
 
+html,
+body {
+  height: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-transform-style: preserve-3d;
+  /*设置内嵌的元素在 3D 空间如何呈现：保留 3D*/
+  -webkit-backface-visibility: hidden;
+  /*(设置进行转换的元素的背面在面对用户时是否可见：隐藏)*/
+  -webkit-touch-callout: none
+}
+
+html,
+body,
+form,
+fieldset,
+p,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  -webkit-text-size-adjust: none;
+}
+
 header,
 footer,
 section,
