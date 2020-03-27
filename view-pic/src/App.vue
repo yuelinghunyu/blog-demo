@@ -9,6 +9,9 @@ export default {
   name: 'App'
 }
 </script>
-
-<style>
+<style scoped>
+#app {
+  height: 100%;
+  position: relative;
+}
 </style>
