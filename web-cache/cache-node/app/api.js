@@ -15,9 +15,14 @@ const returnResult = () => {
   })
 }
 
+const setCache = (ctx) => {
+  // Cache-Control
+  ctx.response.set("Cache-Control", "max-age=10;private")
+}
 class CacheCtl {
   async getCacheData (ctx) {
     // 设置缓存方法
+    setCache(ctx)
     const result = await returnResult()
     ctx.body = result
   }
