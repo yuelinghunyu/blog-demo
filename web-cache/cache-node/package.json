@@ -1,0 +1,20 @@
+{
+  "name": "cache-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon app/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-static": "^5.0.0"
+  },
+  "devDependencies": {
+    "koa-router": "^8.0.8",
+    "nodemon": "^2.0.3"
+  }
+}
