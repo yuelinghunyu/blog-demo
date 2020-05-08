@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     async getServerContent (fn) {
-      const url = "/cache/debug"
+      const url = "/cache/cache"
       const result = await axios.get(url)
       const data = result.data
       this.text = data.content
