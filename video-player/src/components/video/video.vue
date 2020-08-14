@@ -36,9 +36,9 @@
         <!-- 进度条 -->
         <div
           class="custom-video_control-bg"
-          @mousedown="handlePrograssDown"
-          @mousemove="handlePrograssMove"
-          @mouseup="handlePrograssUp"
+          @mousedown="handleProgressDown"
+          @mousemove="handleProgressMove"
+          @mouseup="handleProgressUp"
         >
           <div 
             class="custom-video_control-bg-outside"
@@ -54,6 +54,27 @@
             ></span>
           </div>
         </div>
+        <!-- 倍速播放 -->
+        <div
+          class="custom-video_control-speed"
+        >
+          <span
+              class="custom-video_control-speed-play"
+          >
+            <svg t="1597394471431" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1207" width="48" height="48"><path d="M931.84 476.16l-435.2-312.32C468.48 148.48 435.2 143.36 435.2 204.8v135.68L189.44 163.84C161.28 148.48 125.44 148.48 128 204.8v614.4c0 51.2 35.84 58.88 61.44 43.52l245.76-176.64V819.2c0 51.2 35.84 58.88 61.44 40.96l435.2-312.32c17.92-12.8 17.92-58.88 0-71.68zM486.4 798.72v-215.04L179.2 798.72V225.28l307.2 215.04V225.28L896 512 486.4 798.72z" p-id="1208" fill="#ffffff"></path></svg>
+          </span>
+          <div
+            class="custom-video_control-speed-bg">
+            <span
+              :class="{'custom-video_control-speed-bg-act': item.val === videoOption.speed}"
+              v-for="item in speedList"
+              :key="item.index"
+              @click="handleSpeedProgressDown(item.val)"
+            >
+              {{item.label}}
+            </span>
+          </div>
+        </div>
         <!-- 声音 -->
         <div
           class="custom-video_control-voice"
@@ -64,9 +85,9 @@
           <div
             class="custom-video_control-voice-bg"
             ref="custom-video_control-voice-bg"
-            @mousedown="handleVolPrograssDown"
-            @mousemove="handleVolPrograssMove"
-            @mouseup="handleVolPrograssUp"
+            @mousedown="handleVolProgressDown"
+            @mousemove="handleVolProgressMove"
+            @mouseup="handleVolProgressUp"
           >
             <div 
               class="custom-video_control-voice-bg-outside"
@@ -107,7 +128,8 @@ export default {
       videoOption: {
         src: require("../../static/media/taru.mp4"), //视频
         poster: require("../../static/images/poster.jpg"), // 初始化占位图片
-        volume: 20
+        volume: 20,
+        speed: 1.0
       },
       videoState: {
         play: false, //播放状态
@@ -123,6 +145,28 @@ export default {
         downState: false,
         topInit: 0
       },
+      speedList: [ // 倍速播放
+        {
+          val: 0.5,
+          label: '0.5x'
+        },
+        {
+          val: 1.0,
+          label: '1.0x'
+        },
+        {
+          val: 1.25,
+          label: '1.25x'
+        },
+        {
+          val: 1.5,
+          label: '1.5x'
+        },
+        {
+          val: 2.0,
+          label: '2.0x'
+        }
+      ],
       videoDom: null, // video
       videoProOut: null, // 视频总进度条
       videoPro: null, // 视频进度条
@@ -134,6 +178,28 @@ export default {
       voicePro: null, // 音频进度条
       voicePoi: null, // 音频进度点
       volProcessHeight: 0,
+      fullScreenType: false
+    }
+  },
+  created () {
+    // 解决全屏时按ESC退出全屏时的BUG
+    const that = this
+    document.addEventListener("fullscreenchange", () => {
+      that.fullScreenType = !that.fullScreenType
+      if (that.fullScreenType !== that.videoState.screenState) {
+        that.handleScreen()
+      }
+    });
+    // 按空格键播放/暂停
+    document.onkeydown = function(){
+      const key = window.event.keyCode;
+      if(key === 32){
+        if (that.videoState.playState) {
+          that.pause('btn')
+        } else {
+          that.play('btn')
+        }
+      }
     }
   },
   mounted() {
@@ -196,13 +262,13 @@ export default {
       this.videoDom.pause()
       this.videoState.play = false
     },
-    handlePrograssDown(ev) { // 监听点击进度条事件，方便获取初始点击的位置
+    handleProgressDown(ev) { // 监听点击进度条事件，方便获取初始点击的位置
       // 视频暂停
       this.videoState.downState = true //按下鼠标标志
       this.pause()
       this.videoState.distance = ev.clientX - this.videoState.leftInit
     },
-    handlePrograssMove(ev) { // 监听移动进度条事件，同步播放相关事件
+    handleProgressMove(ev) { // 监听移动进度条事件，同步播放相关事件
       if(!this.videoState.downState) return
       let disX = ev.clientX - this.videoState.leftInit
       if(disX > this.processWidth) {
@@ -214,7 +280,7 @@ export default {
       this.videoState.distance = disX
       this.videoDom.currentTime = this.videoState.distance / this.processWidth * this.videoDom.duration
     },
-    handlePrograssUp() { //松开鼠标，播放当前进度条视频
+    handleProgressUp() { //松开鼠标，播放当前进度条视频
       this.videoState.downState = false
       // 视频播放
       this.videoDom.currentTime = this.videoState.distance / this.processWidth * this.videoDom.duration
@@ -223,13 +289,17 @@ export default {
         this.play()
       }
     },
-    handleVolPrograssDown(ev) { // 监听声音点击事件
+    handleSpeedProgressDown(speed) { // 倍速播放
+      this.videoOption.speed = speed
+      this.videoDom.playbackRate = speed
+    },
+    handleVolProgressDown(ev) { // 监听声音点击事件
       this.voiceState.topInit = this.getOffset(this.voiceProOut).top
       this.volProcessHeight = this.voiceProOut.clientHeight
       this.voiceState.downState = true //按下鼠标标志
       this.voiceState.distance = ev.clientY - this.voiceState.topInit
     },
-    handleVolPrograssMove(ev) { // 监听声音进度条移动事件
+    handleVolProgressMove(ev) { // 监听声音进度条移动事件
       if(!this.voiceState.downState) return
       let disY = this.voiceState.topInit + this.volProcessHeight - ev.clientY
       if(disY > this.volProcessHeight - 2) {
@@ -242,7 +312,7 @@ export default {
       this.videoDom.volume = this.voiceState.distance / this.volProcessHeight
       this.videoOption.volume = Math.round(this.videoDom.volume * 100)
     },
-    handleVolPrograssUp() { // 监听声音鼠标离开事件
+    handleVolProgressUp() { // 监听声音鼠标离开事件
       this.voiceState.downState = false //按下鼠标标志
       this.videoDom.volume = this.voiceState.distance / this.volProcessHeight
       this.videoOption.volume = Math.round(this.videoDom.volume * 100)
@@ -299,8 +369,8 @@ export default {
     },
     exitFullscreen() {
       let de = document
-      if (de.exitFullscreen) {
-        de.exitFullscreen();
+      if (de.cancelFullScrren) {
+        de.cancelFullScrren();
       } else if (de.mozCancelFullScreen) {
         de.mozCancelFullScreen();
       } else if (de.webkitCancelFullScreen) {
@@ -406,8 +476,9 @@ export default {
   left: -1%;
   transition: all 0.2s;
 }
-/* 控制栏 —— 声音、时间、全屏缩放 */
+/* 控制栏 —— 声音、倍速播放、时间、全屏缩放 */
 .custom-video_control-voice,
+.custom-video_control-speed,
 .custom-video_control-time,
 .custom-video_control-full{
   display: flex;
@@ -417,11 +488,24 @@ export default {
   color: #fff;
   position: relative;
 }
-.custom-video_control-voice:hover > .custom-video_control-voice-bg{
+.custom-video_control-voice:hover > .custom-video_control-voice-bg,
+.custom-video_control-speed:hover > .custom-video_control-speed-bg{
   display: block;
 }
-.custom-video_control-voice-play{
+.custom-video_control-voice-play, .custom-video_control-speed-play{
   z-index: 10;
+}
+.custom-video_control-voice, .custom-video_control-speed {
+  height: 50px!important;
+  cursor: pointer;
+}
+.custom-video_control-speed-play {
+  line-height: 20px;
+}
+.custom-video_control-speed-play svg {
+  width: 20px;
+  height: 16px;
+  vertical-align: text-bottom;
 }
 .custom-video_control-voice-bg{
   display: none;
@@ -430,8 +514,33 @@ export default {
   height: 100px;
   background-color: rgba(0, 0, 0, .55);
   left: 0;
-  bottom: 0px;
+  bottom: 50px;
   border-radius: 15px;
+}
+.custom-video_control-speed-bg {
+  display: none;
+  position: absolute;
+  width: 50px;
+  font-size: 14px;
+  background-color: rgba(0, 0, 0, .55);
+  left: 50%;
+  bottom: 50px;
+  border-radius: 5px;
+  transform: translate(-50%, 0);
+  overflow: hidden;
+}
+.custom-video_control-speed-bg span {
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+  display: inline-block;
+  cursor: pointer;
+}
+.custom-video_control-speed-bg span:hover {
+  background-color: #4AB7BD;
+}
+.custom-video_control-speed-bg-act {
+  background-color: #4AB7BD!important;
 }
 .custom-video_control-voice-bg-outside{
   width: 5px;
