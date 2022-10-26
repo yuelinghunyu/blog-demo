@@ -44,4 +44,5 @@ downPcm.addEventListener("click", () => {
   if(recorder === null) return alert("请先录音")
   const src = recorder.pcmSrc()
   downPcm.setAttribute("href", src)
+  downPcm.setAttribute('download', src.split('/')[3] + '.pcm'); // 命名为 pcm 格式
 })
